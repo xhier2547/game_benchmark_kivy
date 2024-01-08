@@ -11,27 +11,28 @@ class MenuScreen(BoxLayout):
         self.orientation = "vertical"
         self.spacing = 10
 
-        self.start_button = Button(text="Start Test", on_press=start_callback)
+        self.start_button = Button(text="Start Reaction Test", on_press=start_callback, font_size = '70sp')
+        self.start_button.background_color =(200/255, 70/255, 90/255, 1)
         self.add_widget(self.start_button)
 
 class ReactionTimeGame(BoxLayout):
     def __init__(self, reset_callback, **kwargs):
         super(ReactionTimeGame, self).__init__(**kwargs)
         self.orientation = "vertical"
-        self.spacing = 10
+        self.spacing = 0
 
         self.reset_callback = reset_callback
 
-        self.reaction_box = Button(text="Click me!", on_press=self.record_reaction_time)
-        self.reaction_box.background_color = (1/255, 150/255, 230/255, 1)
+        self.reaction_box = Button(text="Click me!", font_size = '60sp', on_press=self.record_reaction_time)
+        self.reaction_box.background_color = (1/255, 230/255, 50/255, 1)
         self.reaction_box.opacity = 0
         self.add_widget(self.reaction_box)
 
         self.reaction_time_label = Label(text="")
         self.add_widget(self.reaction_time_label)
 
-        self.reset_button = Button(text="Try again", on_press=self.reset_test)
-        self.reset_button.background_color = (150/255, 100/255, 70/255, 1)
+        self.reset_button = Button(text="Try again", font_size = '60sp', on_press=self.reset_test)
+        self.reset_button.background_color = (100/255, 100/255, 255/255, 1)
         self.reset_button.opacity = 0
         self.add_widget(self.reset_button)
 
@@ -46,7 +47,7 @@ class ReactionTimeGame(BoxLayout):
 
     def change_color(self, dt):
         self.reaction_box.disabled = False
-        self.reaction_box.background_color = (1/255, 150/255, 230/255, 1)
+        self.reaction_box.background_color = (00/255, 560/255, 150/255, 1)
         self.start_time = Clock.get_time()
 
     def record_reaction_time(self, instance):
@@ -58,7 +59,7 @@ class ReactionTimeGame(BoxLayout):
             self.num_attempts += 1
             self.total_reaction_time += reaction_time
             if self.num_attempts < 5:
-                Clock.schedule_once(self.start_test)  # Removed the extra arguments
+                Clock.schedule_once(self.start_test)
             else:
                 self.display_average_reaction_time()
 
@@ -68,8 +69,8 @@ class ReactionTimeGame(BoxLayout):
         self.num_attempts = 0
         self.total_reaction_time = 0
         self.reset_button.opacity = 0
-        self.reset_callback()  # Call the reset_callback to restart the game
-
+        self.reset_callback() 
+        
     def display_average_reaction_time(self):
         average_reaction_time = self.total_reaction_time / self.num_attempts
         self.reaction_time_label.text = f"Average Reaction Time: {average_reaction_time:.0f} ms"
