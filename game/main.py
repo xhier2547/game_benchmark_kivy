@@ -56,13 +56,20 @@ class ReactionTimeGame(BoxLayout):
             end_time = Clock.get_time()
             reaction_time = (end_time - self.start_time) * 1000
             self.reaction_time_label.text = f"{reaction_time:.0f} ms \n "
+            self.reaction_time_label.font_size = '70sp'
             self.num_attempts += 1
             self.total_reaction_time += reaction_time
             if self.num_attempts < 5:
                 Clock.schedule_once(self.start_test)
             else:
                 self.display_average_reaction_time()
-
+                
+    def display_average_reaction_time(self):
+        average_reaction_time = self.total_reaction_time / self.num_attempts
+        self.reaction_time_label.text =f"Average Reaction Time: {average_reaction_time:.0f} ms" 
+        self.reaction_time_label.font_size = '40sp'
+        self.reset_button.opacity = 1
+        
     def reset_test(self, instance):
         self.reaction_box.disabled = False
         self.reaction_time_label.text = ""
@@ -70,11 +77,6 @@ class ReactionTimeGame(BoxLayout):
         self.total_reaction_time = 0
         self.reset_button.opacity = 0
         self.reset_callback() 
-        
-    def display_average_reaction_time(self):
-        average_reaction_time = self.total_reaction_time / self.num_attempts
-        self.reaction_time_label.text = f"Average Reaction Time: {average_reaction_time:.0f} ms"
-        self.reset_button.opacity = 1
 
 class ReactionTimeTestApp(App):
     def build(self):
