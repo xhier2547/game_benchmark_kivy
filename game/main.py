@@ -16,11 +16,11 @@ class MenuScreen(BoxLayout):
         self.start_button.background_color = (200/255, 70/255, 90/255, 1)
         self.add_widget(self.start_button)
 
-        self.score_rank_button = Button(text="Score Rank", on_press=show_score_rank_callback, font_size='20sp')
+        self.score_rank_button = Button(text="Score Rank", on_press=show_score_rank_callback, font_size='30sp')
         self.score_rank_button.background_color = (100/255, 100/255, 255/255, 1)
         self.add_widget(self.score_rank_button)
 
-        self.about_button = Button(text="About", on_press=show_about_callback, font_size='20sp')
+        self.about_button = Button(text="About", on_press=show_about_callback, font_size='30sp')
         self.about_button.background_color = (100/255, 100/255, 255/255, 1)
         self.add_widget(self.about_button)
 
@@ -31,15 +31,15 @@ class ButtonsLayout(BoxLayout):
         self.orientation = "horizontal"
         self.spacing = 6
 
-        self.reset_button = Button(text="Try again", font_size='20sp', on_press=reset_callback)
+        self.reset_button = Button(text="Try again", font_size='35sp', on_press=reset_callback)
         self.reset_button.background_color = (100/255, 100/255, 255/255, 1)
         self.reset_button.opacity = 0
 
-        self.save_button = Button(text="Save Score", font_size='20sp', on_press=save_callback)
+        self.save_button = Button(text="Save Score", font_size='35sp', on_press=save_callback)
         self.save_button.background_color = (100/255, 100/255, 255/255, 1)
         self.save_button.opacity = 0
 
-        self.back_to_menu_button = Button(text="Back to Menu", font_size='20sp', on_press=back_to_menu_callback)
+        self.back_to_menu_button = Button(text="Back to Menu", font_size='35sp', on_press=back_to_menu_callback)
         self.back_to_menu_button.background_color = (100/255, 100/255, 255/255, 1)
 
         self.add_widget(self.reset_button)
@@ -214,8 +214,8 @@ class ReactionTimeTestApp(App):
         back_to_menu_button = Button(
             text="Back to Menu",
             font_size='20sp',
-            background_color=(0.8, 0.8, 0.8, 1),  # Adjust color as needed
-            on_press=lambda x: self.back_to_menu(x)  # Use a lambda function to avoid automatic 'instance' argument
+            background_color=(0.8, 0.8, 0.8, 1),
+            on_press=lambda x: self.back_to_menu(x)  
         )
         about_layout.add_widget(back_to_menu_button)
 
