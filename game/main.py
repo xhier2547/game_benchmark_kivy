@@ -24,6 +24,29 @@ class MenuScreen(BoxLayout):
         self.about_button.background_color = (100/255, 100/255, 255/255, 1)
         self.add_widget(self.about_button)
 
+
+class ButtonsLayout(BoxLayout):
+    def __init__(self, reset_callback, save_callback, back_to_menu_callback, **kwargs):
+        super(ButtonsLayout, self).__init__(**kwargs)
+        self.orientation = "horizontal"
+        self.spacing = 6
+
+        self.reset_button = Button(text="Try again", font_size='20sp', on_press=reset_callback)
+        self.reset_button.background_color = (100/255, 100/255, 255/255, 1)
+        self.reset_button.opacity = 0
+
+        self.save_button = Button(text="Save Score", font_size='20sp', on_press=save_callback)
+        self.save_button.background_color = (100/255, 100/255, 255/255, 1)
+        self.save_button.opacity = 0
+
+        self.back_to_menu_button = Button(text="Back to Menu", font_size='20sp', on_press=back_to_menu_callback)
+        self.back_to_menu_button.background_color = (100/255, 100/255, 255/255, 1)
+
+        self.add_widget(self.reset_button)
+        self.add_widget(self.save_button)
+        self.add_widget(self.back_to_menu_button)
+
+
 class ReactionTimeGame(BoxLayout):
     def __init__(self, reset_callback, save_callback, back_to_menu_callback, **kwargs):
         super(ReactionTimeGame, self).__init__(**kwargs)
@@ -38,24 +61,18 @@ class ReactionTimeGame(BoxLayout):
         self.reaction_box = Button(text="Click me!", font_size='60sp', on_press=self.record_reaction_time)
         self.reaction_box.background_color = (1/255, 230/255, 50/255, 1)
         self.reaction_box.opacity = 0
-        self.add_widget(self.reaction_box)
 
         self.reaction_time_label = Label(text="")
+
+        self.buttons_layout = ButtonsLayout(
+            reset_callback=self.reset_test,
+            save_callback=self.save_score,
+            back_to_menu_callback=self.back_to_menu
+        )
+
+        self.add_widget(self.reaction_box)
         self.add_widget(self.reaction_time_label)
-
-        self.reset_button = Button(text="Try again", font_size='60sp', on_press=self.reset_test)
-        self.reset_button.background_color = (100/255, 100/255, 255/255, 1)
-        self.reset_button.opacity = 0
-        self.add_widget(self.reset_button)
-
-        self.save_button = Button(text="Save Score", font_size='20sp', on_press=self.save_score)
-        self.save_button.background_color = (100/255, 100/255, 255/255, 1)
-        self.save_button.opacity = 0
-        self.add_widget(self.save_button)
-
-        self.back_to_menu_button = Button(text="Back to Menu", font_size='20sp', on_press=self.back_to_menu)
-        self.back_to_menu_button.background_color = (100/255, 100/255, 255/255, 1)
-        self.add_widget(self.back_to_menu_button)
+        self.add_widget(self.buttons_layout)
 
         self.num_attempts = 0
         self.total_reaction_time = 0
@@ -89,8 +106,8 @@ class ReactionTimeGame(BoxLayout):
         average_reaction_time = self.total_reaction_time / self.num_attempts
         self.reaction_time_label.text = f"Average Reaction Time: {average_reaction_time:.0f} ms"
         self.reaction_time_label.font_size = '40sp'
-        self.reset_button.opacity = 1
-        self.save_button.opacity = 1
+        self.buttons_layout.reset_button.opacity = 1
+        self.buttons_layout.save_button.opacity = 1
         self.reaction_times.append(average_reaction_time)
 
     def reset_test(self, instance):
@@ -98,8 +115,8 @@ class ReactionTimeGame(BoxLayout):
         self.reaction_time_label.text = ""
         self.num_attempts = 0
         self.total_reaction_time = 0
-        self.reset_button.opacity = 0
-        self.save_button.opacity = 0
+        self.buttons_layout.reset_button.opacity = 0
+        self.buttons_layout.save_button.opacity = 0
         self.reset_callback()
 
     def save_score(self, instance):
@@ -109,6 +126,7 @@ class ReactionTimeGame(BoxLayout):
     def back_to_menu(self, instance):
         self.back_to_menu_callback()
 
+
 class ReactionTimeTestApp(App):
     def build(self):
         self.menu_screen = MenuScreen(
@@ -117,7 +135,7 @@ class ReactionTimeTestApp(App):
             show_about_callback=self.show_about
         )
         return self.menu_screen
-
+    
     def start_game(self, instance):
         self.game_screen = ReactionTimeGame(
             reset_callback=self.reset_game,
@@ -140,14 +158,14 @@ class ReactionTimeTestApp(App):
         if hasattr(self, 'game_screen') and isinstance(self.game_screen, ReactionTimeGame):
             self.game_screen.save_score(instance)
 
-    def back_to_menu(self):
+    def back_to_menu(self, instance=None):
         self.menu_screen.clear_widgets()
         self.menu_screen.add_widget(MenuScreen(
             start_callback=self.start_game,
             show_score_rank_callback=self.show_score_rank,
             show_about_callback=self.show_about
         ))
-
+        
     def show_score_rank(self, instance):
         if hasattr(self, 'game_screen') and isinstance(self.game_screen, ReactionTimeGame):
             reaction_times = self.game_screen.reaction_times
@@ -156,7 +174,6 @@ class ReactionTimeTestApp(App):
                 print(f"Average Reaction Time: {average_reaction_time:.2f} ms")
             else:
                 print("No reaction times recorded yet.")
-
 
     def show_about(self, instance):
         about_layout = BoxLayout(orientation="vertical", spacing=6)
@@ -169,28 +186,41 @@ class ReactionTimeTestApp(App):
             valign='middle'
         )
         about_layout.add_widget(about_label)
+
         instagram_button = Button(
             text="Instagram",
             font_size='20sp',
-            background_color=(0, 0, 1, 1),  
+            background_color=(0, 0, 1, 1),
             on_press=lambda x: self.open_link("https://www.instagram.com/tng.aj/")
         )
         about_layout.add_widget(instagram_button)
+
         twitter_button = Button(
             text="Twitter",
             font_size='20sp',
-            background_color=(0, 0.5, 1, 1), 
+            background_color=(0, 0.5, 1, 1),
             on_press=lambda x: self.open_link("https://twitter.com/Xhi3r")
         )
         about_layout.add_widget(twitter_button)
-        
+
         github_button = Button(
             text="GitHub",
             font_size='20sp',
-            background_color=(0.5, 0, 0, 1), 
+            background_color=(0.5, 0, 0, 1),
             on_press=lambda x: self.open_link("https://github.com/xhier2547/game_benchmark_kivy")
         )
         about_layout.add_widget(github_button)
+
+        back_to_menu_button = Button(
+            text="Back to Menu",
+            font_size='20sp',
+            background_color=(0.8, 0.8, 0.8, 1),  # Adjust color as needed
+            on_press=lambda x: self.back_to_menu(x)  # Use a lambda function to avoid automatic 'instance' argument
+        )
+        about_layout.add_widget(back_to_menu_button)
+
+        self.menu_screen.clear_widgets()
+        self.menu_screen.add_widget(about_layout)
 
         self.menu_screen.clear_widgets()
         self.menu_screen.add_widget(about_layout)
@@ -198,6 +228,7 @@ class ReactionTimeTestApp(App):
     def open_link(self, url):
         import webbrowser
         webbrowser.open(url)
+
 
 if __name__ == '__main__':
     ReactionTimeTestApp().run()
