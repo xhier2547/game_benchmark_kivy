@@ -103,7 +103,8 @@ class ReactionTimeGame(BoxLayout):
         self.reset_callback()
 
     def save_score(self, instance):
-        self.save_callback(instance)
+        if hasattr(App.get_running_app(), 'save_callback'):
+            App.get_running_app().save_callback(instance)
 
     def back_to_menu(self, instance):
         self.back_to_menu_callback()
@@ -148,13 +149,55 @@ class ReactionTimeTestApp(App):
         ))
 
     def show_score_rank(self, instance):
-        # รอใส่ฟังก์ชั่น
-        pass
+        if hasattr(self, 'game_screen') and isinstance(self.game_screen, ReactionTimeGame):
+            reaction_times = self.game_screen.reaction_times
+            if reaction_times:
+                average_reaction_time = sum(reaction_times) / len(reaction_times)
+                print(f"Average Reaction Time: {average_reaction_time:.2f} ms")
+            else:
+                print("No reaction times recorded yet.")
+
 
     def show_about(self, instance):
-        # รอใส่ฟังก์ชั่น
-        pass
+        about_layout = BoxLayout(orientation="vertical", spacing=6)
 
+        about_label = Label(
+            text="Contact me.\n"
+                "Follow me on social media for CONTENT:",
+            font_size='20sp',
+            halign='center',
+            valign='middle'
+        )
+        about_layout.add_widget(about_label)
+        instagram_button = Button(
+            text="Instagram",
+            font_size='20sp',
+            background_color=(0, 0, 1, 1),  
+            on_press=lambda x: self.open_link("https://www.instagram.com/tng.aj/")
+        )
+        about_layout.add_widget(instagram_button)
+        twitter_button = Button(
+            text="Twitter",
+            font_size='20sp',
+            background_color=(0, 0.5, 1, 1), 
+            on_press=lambda x: self.open_link("https://twitter.com/Xhi3r")
+        )
+        about_layout.add_widget(twitter_button)
+        
+        github_button = Button(
+            text="GitHub",
+            font_size='20sp',
+            background_color=(0.5, 0, 0, 1), 
+            on_press=lambda x: self.open_link("https://github.com/xhier2547/game_benchmark_kivy")
+        )
+        about_layout.add_widget(github_button)
+
+        self.menu_screen.clear_widgets()
+        self.menu_screen.add_widget(about_layout)
+
+    def open_link(self, url):
+        import webbrowser
+        webbrowser.open(url)
 
 if __name__ == '__main__':
     ReactionTimeTestApp().run()
