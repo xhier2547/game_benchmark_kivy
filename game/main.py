@@ -4,6 +4,7 @@ from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.clock import Clock
 from random import uniform
+from kivy.core.audio import SoundLoader
 
 
 class MenuScreen(BoxLayout):
@@ -23,7 +24,7 @@ class MenuScreen(BoxLayout):
         self.about_button = Button(text="About", on_press=show_about_callback, font_size='30sp')
         self.about_button.background_color = (100/255, 100/255, 255/255, 1)
         self.add_widget(self.about_button)
-
+        
 
 class ButtonsLayout(BoxLayout):
     def __init__(self, reset_callback, save_callback, back_to_menu_callback, **kwargs):
@@ -46,6 +47,8 @@ class ButtonsLayout(BoxLayout):
         self.add_widget(self.reset_button)
         self.add_widget(self.save_button)
         self.add_widget(self.back_to_menu_button)
+
+        
 
 
 class ReactionTimeGame(BoxLayout):
@@ -70,6 +73,7 @@ class ReactionTimeGame(BoxLayout):
             reset_callback=self.reset_test,
             save_callback=self.save_score,
             back_to_menu_callback=self.back_to_menu
+            
         )
 
         self.add_widget(self.reaction_box)
@@ -131,6 +135,14 @@ class ReactionTimeGame(BoxLayout):
 
 class ReactionTimeTestApp(App):
     def build(self):
+                
+        self.sound = SoundLoader.load('GODS.mp3')
+        if self.sound:
+            self.sound.volume = 0.05
+            self.sound.loop = True
+            
+            self.sound.play()
+
         self.menu_screen = MenuScreen(
             start_callback=self.start_game,
             show_score_rank_callback=self.show_score_rank,
