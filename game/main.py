@@ -142,6 +142,8 @@ class ReactionTimeTestApp(App):
             self.sound.loop = True
             
             self.sound.play()
+        self.title = 'God Reaction Test'
+        self.icon = 'game/X.png'
 
         self.menu_screen = MenuScreen(
             start_callback=self.start_game,
