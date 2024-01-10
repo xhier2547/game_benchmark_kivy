@@ -30,7 +30,8 @@ class ButtonsLayout(BoxLayout):
         super(ButtonsLayout, self).__init__(**kwargs)
         self.orientation = "horizontal"
         self.spacing = 6
-
+        self.size_hint=(1, 0.3)
+        
         self.reset_button = Button(text="Try again", font_size='35sp', on_press=reset_callback)
         self.reset_button.background_color = (100/255, 100/255, 255/255, 1)
         self.reset_button.opacity = 0
@@ -58,7 +59,8 @@ class ReactionTimeGame(BoxLayout):
         self.back_to_menu_callback = back_to_menu_callback
         self.reaction_times = []
 
-        self.reaction_box = Button(text="Click me!", font_size='60sp', on_press=self.record_reaction_time)
+        self.reaction_box = Button(text="Click me!", font_size='60sp', on_press=self.record_reaction_time, 
+                            size_hint=(1, 2 ))
         self.reaction_box.background_color = (1/255, 230/255, 50/255, 1)
         self.reaction_box.opacity = 0
 
