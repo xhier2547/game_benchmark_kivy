@@ -5,10 +5,11 @@ from kivy.uix.label import Label
 from kivy.clock import Clock
 from random import uniform
 from kivy.core.audio import SoundLoader
+from kivy.base import stopTouchApp
 
 
 class MenuScreen(BoxLayout):
-    def __init__(self, start_callback, show_score_rank_callback, show_about_callback, **kwargs):
+    def __init__(self, start_callback, show_score_rank_callback, exit_callback, show_about_callback, **kwargs):
         super(MenuScreen, self).__init__(**kwargs)
         self.orientation = "vertical"
         self.spacing = 10
@@ -24,6 +25,14 @@ class MenuScreen(BoxLayout):
         self.about_button = Button(text="About", on_press=show_about_callback, font_size='30sp')
         self.about_button.background_color = (100/255, 100/255, 255/255, 1)
         self.add_widget(self.about_button)
+        
+        self.setting_button = Button(text="Setting", on_press=show_about_callback , font_size='30sp')
+        self.setting_button.background_color = (100/255, 100/255, 255/255, 1)
+        self.add_widget(self.setting_button)
+        
+        self.exits_button = Button(text="Exit", on_press=exit_callback , font_size='30sp')
+        self.exits_button.background_color = (100/255, 100/255, 5/255, 1)
+        self.add_widget(self.exits_button)
         
 
 class ButtonsLayout(BoxLayout):
@@ -148,7 +157,8 @@ class ReactionTimeTestApp(App):
         self.menu_screen = MenuScreen(
             start_callback=self.start_game,
             show_score_rank_callback=self.show_score_rank,
-            show_about_callback=self.show_about
+            show_about_callback=self.show_about,
+            exit_callback=self.exit_game
         )
         return self.menu_screen
     
@@ -169,6 +179,9 @@ class ReactionTimeTestApp(App):
             show_score_rank_callback=self.show_score_rank,
             show_about_callback=self.show_about
         ))
+        
+    def exit_game(self, instance):
+        stopTouchApp()
 
     def save_score(self, instance):
         if hasattr(self, 'game_screen') and isinstance(self.game_screen, ReactionTimeGame):
