@@ -1,3 +1,4 @@
+
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
@@ -9,7 +10,8 @@ from kivy.base import stopTouchApp
 
 
 class MenuScreen(BoxLayout):
-    def __init__(self, start_callback, show_score_rank_callback, exit_callback, show_about_callback, **kwargs):
+    def __init__(self, start_callback, show_score_rank_callback, exit_callback, show_about_callback, setting_callback,
+                 volume_up_callback, volume_down_callback, **kwargs):
         super(MenuScreen, self).__init__(**kwargs)
         self.orientation = "vertical"
         self.spacing = 10
@@ -26,13 +28,17 @@ class MenuScreen(BoxLayout):
         self.about_button.background_color = (100/255, 100/255, 255/255, 1)
         self.add_widget(self.about_button)
         
-        self.setting_button = Button(text="Setting", on_press=show_about_callback , font_size='30sp')
+        self.setting_button = Button(text="Setting", on_press=setting_callback, font_size='30sp')
         self.setting_button.background_color = (100/255, 100/255, 255/255, 1)
         self.add_widget(self.setting_button)
-        
-        self.exits_button = Button(text="Exit", on_press=exit_callback , font_size='30sp')
+
+        self.exits_button = Button(text="Exit", on_press=exit_callback, font_size='30sp')
         self.exits_button.background_color = (100/255, 100/255, 5/255, 1)
         self.add_widget(self.exits_button)
+
+        self.volume_up_callback = volume_up_callback
+        self.volume_down_callback = volume_down_callback
+        
         
 
 class ButtonsLayout(BoxLayout):
@@ -158,8 +164,14 @@ class ReactionTimeTestApp(App):
             start_callback=self.start_game,
             show_score_rank_callback=self.show_score_rank,
             show_about_callback=self.show_about,
-            exit_callback=self.exit_game
+            setting_callback=self.show_setting,
+            exit_callback=self.exit_game,
+            volume_up_callback=self.volume_up,
+            volume_down_callback=self.volume_down
         )
+          
+        
+        
         return self.menu_screen
     
     def start_game(self, instance):
@@ -173,12 +185,16 @@ class ReactionTimeTestApp(App):
         self.game_screen.start_test()
 
     def reset_game(self):
-        self.menu_screen.clear_widgets()
-        self.menu_screen.add_widget(MenuScreen(
+        self.menu_screen = MenuScreen(
             start_callback=self.start_game,
             show_score_rank_callback=self.show_score_rank,
-            show_about_callback=self.show_about
-        ))
+            show_about_callback=self.show_about,
+            setting_callback=self.show_setting,
+            exit_callback=self.exit_game,
+            volume_up_callback=self.volume_up,
+            volume_down_callback=self.volume_down,
+            back_to_menu_callback= self.back_to_menu
+        )
         
     def exit_game(self, instance):
         stopTouchApp()
@@ -192,8 +208,13 @@ class ReactionTimeTestApp(App):
         self.menu_screen.add_widget(MenuScreen(
             start_callback=self.start_game,
             show_score_rank_callback=self.show_score_rank,
-            show_about_callback=self.show_about
-        ))
+            exit_callback=self.exit_game,
+            show_about_callback=self.show_about,
+            setting_callback = self.show_setting,
+            volume_up_callback=self.volume_up,
+            volume_down_callback=self.volume_down,
+    ))
+
         
     def show_score_rank(self, instance):
         if hasattr(self, 'game_screen') and isinstance(self.game_screen, ReactionTimeGame):
@@ -251,8 +272,68 @@ class ReactionTimeTestApp(App):
         self.menu_screen.clear_widgets()
         self.menu_screen.add_widget(about_layout)
 
+
+    def show_setting(self, instance):
+        setting_layout = BoxLayout(orientation="vertical", spacing=6)
+
+        setting_label = Label(
+            text="Setting\n"
+                 "you can up or down of volume music hear",
+
+            font_size='20sp',
+            halign='center',
+            valign='middle'
+        )
+        setting_layout.add_widget(setting_label)
+
+
+        self.setting_label = Label(text=f"Volume: {self.sound.volume:.2f}", font_size='20sp', halign='center',
+                                valign='middle')
+        setting_layout.add_widget(self.setting_label)
+        
+        vol_up_button = Button(
+            text="Volume Up",
+            font_size='20sp',
+            background_color=(1, 0.5, 0.5, 1),
+            on_press=self.volume_up
+        )
+        setting_layout.add_widget(vol_up_button)
+
+        vol_down_button = Button(
+            text="Volume Down",
+            font_size='20sp',
+            background_color=(0.5, 1, 0.5, 1),
+            on_press=self.volume_down
+        )
+        setting_layout.add_widget(vol_down_button)
+
+        back_to_menu_button = Button(
+            text="Back to Menu",
+            font_size='20sp',
+            background_color=(0.8, 0.8, 0.8, 1),
+            on_press=lambda x: self.back_to_menu(x)  
+        )
+        setting_layout.add_widget(back_to_menu_button)
+        
         self.menu_screen.clear_widgets()
-        self.menu_screen.add_widget(about_layout)
+        self.menu_screen.add_widget(setting_layout)
+        
+        
+
+    def volume_up(self, instance):
+        if hasattr(self, 'sound') and self.sound:
+            self.sound.volume += 0.1
+            self.update_volume_label()
+
+    def volume_down(self, instance):
+        if hasattr(self, 'sound') and self.sound:
+            self.sound.volume = max(0, self.sound.volume - 0.1) 
+            self.update_volume_label()
+    
+    def update_volume_label(self):
+        if hasattr(self, 'setting_label'):
+            self.setting_label.text = f"Volume: {self.sound.volume:.2f}"
+
 
     def open_link(self, url):
         import webbrowser
