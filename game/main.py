@@ -169,7 +169,7 @@ class ReactionTimeTestApp(App):
             volume_up_callback=self.volume_up,
             volume_down_callback=self.volume_down
         )
-          
+
         
         
         return self.menu_screen
@@ -277,24 +277,24 @@ class ReactionTimeTestApp(App):
         setting_layout = BoxLayout(orientation="vertical", spacing=6)
 
         setting_label = Label(
-            text="Setting\n"
+            text="- Setting -\n"
                  "you can up or down of volume music hear",
 
-            font_size='20sp',
+            font_size='40sp',
             halign='center',
             valign='middle'
         )
         setting_layout.add_widget(setting_label)
 
 
-        self.setting_label = Label(text=f"Volume: {self.sound.volume:.2f}", font_size='20sp', halign='center',
+        self.setting_label = Label(text=f"Volume: {self.sound.volume:.2f}", font_size='35sp', halign='center',
                                 valign='middle')
         setting_layout.add_widget(self.setting_label)
         
         vol_up_button = Button(
             text="Volume Up",
             font_size='20sp',
-            background_color=(1, 0.5, 0.5, 1),
+            background_color=(0.2, 1, 0.2, 1),
             on_press=self.volume_up
         )
         setting_layout.add_widget(vol_up_button)
@@ -302,7 +302,7 @@ class ReactionTimeTestApp(App):
         vol_down_button = Button(
             text="Volume Down",
             font_size='20sp',
-            background_color=(0.5, 1, 0.5, 1),
+            background_color=(1, 0.2, 0.2, 1),
             on_press=self.volume_down
         )
         setting_layout.add_widget(vol_down_button)
