@@ -37,9 +37,9 @@ class MenuScreen(BoxLayout):
         self.add_widget(self.setting_button)
 
         #Exit
-        self.exits_button = Button(text="Exit", on_press=exit_callback, font_size='30sp')
-        self.exits_button.background_color = (100/255, 100/255, 5/255, 1)
-        self.add_widget(self.exits_button)
+        self.exit_button = Button(text="Exit", on_press=exit_callback, font_size='30sp')
+        self.exit_button.background_color = (100/255, 100/255, 5/255, 1)
+        self.add_widget(self.exit_button)
         
         
 
@@ -147,7 +147,14 @@ class ReactionTimeGame(BoxLayout):
         self.total_reaction_time = 0
         self.buttons_layout.reset_button.opacity = 0
         self.buttons_layout.save_button.opacity = 0
-        self.reset_callback()
+
+        self.clear_widgets()
+
+        self.add_widget(self.reaction_box)
+        self.add_widget(self.reaction_time_label)
+        self.add_widget(self.buttons_layout)
+
+        Clock.schedule_once(self.start_test)
 
     def save_score(self, instance):
         if hasattr(App.get_running_app(), 'save_callback'):
@@ -167,8 +174,9 @@ class ReactionTimeTestApp(App):
         if self.sound:
             self.sound.volume = 0.01
             self.sound.loop = True
-            
             self.sound.play()
+        else:
+            print("Failed to load sound file.")
             
         self.menu_screen = MenuScreen(
             start_callback=self.start_game,
@@ -364,7 +372,7 @@ class ReactionTimeTestApp(App):
         
     def volume_up(self, instance):
         if hasattr(self, 'sound') and self.sound:
-            self.sound.volume += 0.1
+            self.sound.volume = min(1, self.sound.volume + 0.1)
             self.update_volume_label()
 
     def volume_down(self, instance):
@@ -372,9 +380,10 @@ class ReactionTimeTestApp(App):
             self.sound.volume = max(0, self.sound.volume - 0.1) 
             self.update_volume_label()
     
-    def update_volume_label(self):
-        if hasattr(self, 'setting_label'):
-            self.setting_label.text = f"Volume: {self.sound.volume:.2f}"
+    def volume_down(self, instance):
+        if hasattr(self, 'sound') and self.sound:
+            self.sound.volume = max(0, self.sound.volume - 0.1)
+            self.update_volume_label()
             
     def open_link(self, url):
         import webbrowser
