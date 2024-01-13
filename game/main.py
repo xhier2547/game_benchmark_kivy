@@ -1,4 +1,3 @@
-
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
@@ -8,7 +7,6 @@ from random import uniform
 from kivy.core.audio import SoundLoader
 from kivy.uix.popup import Popup
 
-from kivy.base import stopTouchApp
 
     #menu
 class MenuScreen(BoxLayout):
@@ -72,14 +70,11 @@ class ButtonsLayout(BoxLayout):
         self.back_to_menu_button = Button(text="Back to Menu", font_size='35sp', on_press=back_to_menu_callback)
         self.back_to_menu_button.background_color = (100/255, 100/255, 255/255, 1)
 
-        #add to screen
+        #to_screen
         self.add_widget(self.reset_button)
         self.add_widget(self.save_button)
         self.add_widget(self.back_to_menu_button)
         
-
-        
-
 
 class ReactionTimeGame(BoxLayout):
     def __init__(self, reset_callback, save_callback, back_to_menu_callback, **kwargs):
@@ -102,8 +97,7 @@ class ReactionTimeGame(BoxLayout):
         self.buttons_layout = ButtonsLayout(
             reset_callback=self.reset_test,
             save_callback=self.save_score,
-            back_to_menu_callback=self.back_to_menu
-            
+            back_to_menu_callback=self.back_to_menu    
         )
 
         self.add_widget(self.reaction_box)
@@ -336,8 +330,7 @@ class ReactionTimeTestApp(App):
             valign='middle'
         )
         setting_layout.add_widget(setting_label)
-
-
+        
         self.setting_label = Label(text=f"Volume: {self.sound.volume:.1f}", font_size='35sp', halign='center',
                                 valign='middle')
         setting_layout.add_widget(self.setting_label)
@@ -369,8 +362,6 @@ class ReactionTimeTestApp(App):
         self.menu_screen.clear_widgets()
         self.menu_screen.add_widget(setting_layout)
         
-        
-
     def volume_up(self, instance):
         if hasattr(self, 'sound') and self.sound:
             self.sound.volume += 0.1
@@ -384,12 +375,10 @@ class ReactionTimeTestApp(App):
     def update_volume_label(self):
         if hasattr(self, 'setting_label'):
             self.setting_label.text = f"Volume: {self.sound.volume:.2f}"
-
-
+            
     def open_link(self, url):
         import webbrowser
         webbrowser.open(url)
-
 
 if __name__ == '__main__':
     ReactionTimeTestApp().run()
