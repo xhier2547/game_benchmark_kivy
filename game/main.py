@@ -221,9 +221,33 @@ class ReactionTimeTestApp(App):
             reaction_times = self.game_screen.reaction_times
             if reaction_times:
                 average_reaction_time = sum(reaction_times) / len(reaction_times)
-                print(f"Average Reaction Time: {average_reaction_time:.2f} ms")
+                self.display_average_score(average_reaction_time)
             else:
                 print("No reaction times recorded yet.")
+
+    def display_average_score(self, average_score):
+        about_layout = BoxLayout(orientation="vertical", spacing=6)
+
+        score_label = Label(
+            text=f"Average Reaction Time: {average_score:.2f} ms",
+            font_size='20sp',
+            halign='center',
+            valign='middle',
+            size_hint = (1,5)
+        )
+        about_layout.add_widget(score_label)
+
+        back_to_menu_button = Button(
+            text="Back to Menu",
+            font_size='20sp',
+            background_color=(0.8, 0.8, 0, 1),
+            on_press=lambda x: self.back_to_menu(x)
+        )
+        about_layout.add_widget(back_to_menu_button)
+
+        self.menu_screen.clear_widgets()
+        self.menu_screen.add_widget(about_layout)
+
 
     def show_about(self, instance):
         about_layout = BoxLayout(orientation="vertical", spacing=6)
@@ -278,7 +302,7 @@ class ReactionTimeTestApp(App):
 
         setting_label = Label(
             text="- Setting -\n"
-                 "you can up or down of volume music hear",
+                "you can up or down of volume music hear",
 
             font_size='40sp',
             halign='center',
