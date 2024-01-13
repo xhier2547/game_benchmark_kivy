@@ -8,39 +8,45 @@ from random import uniform
 from kivy.core.audio import SoundLoader
 from kivy.base import stopTouchApp
 
-
+    #menu
 class MenuScreen(BoxLayout):
     def __init__(self, start_callback, show_score_rank_callback, exit_callback, show_about_callback, setting_callback,
                  volume_up_callback, volume_down_callback, **kwargs):
         super(MenuScreen, self).__init__(**kwargs)
         self.orientation = "vertical"
         self.spacing = 10
-
+        
+        #Start Reaction Test
         self.start_button = Button(text="Start Reaction Test", on_press=start_callback, font_size='70sp')
         self.start_button.background_color = (200/255, 70/255, 90/255, 1)
         self.add_widget(self.start_button)
 
+        #Score Rank
         self.score_rank_button = Button(text="Score Rank", on_press=show_score_rank_callback, font_size='30sp')
         self.score_rank_button.background_color = (100/255, 100/255, 255/255, 1)
         self.add_widget(self.score_rank_button)
-
+        
+        #About
         self.about_button = Button(text="About", on_press=show_about_callback, font_size='30sp')
         self.about_button.background_color = (100/255, 100/255, 255/255, 1)
         self.add_widget(self.about_button)
         
+        #Setting
         self.setting_button = Button(text="Setting", on_press=setting_callback, font_size='30sp')
         self.setting_button.background_color = (100/255, 100/255, 255/255, 1)
         self.add_widget(self.setting_button)
 
+        #Exit
         self.exits_button = Button(text="Exit", on_press=exit_callback, font_size='30sp')
         self.exits_button.background_color = (100/255, 100/255, 5/255, 1)
         self.add_widget(self.exits_button)
 
+        #vol up down
         self.volume_up_callback = volume_up_callback
         self.volume_down_callback = volume_down_callback
         
         
-
+    #game stated
 class ButtonsLayout(BoxLayout):
     def __init__(self, reset_callback, save_callback, back_to_menu_callback, **kwargs):
         super(ButtonsLayout, self).__init__(**kwargs)
@@ -48,17 +54,21 @@ class ButtonsLayout(BoxLayout):
         self.spacing = 6
         self.size_hint=(1, 0.3)
         
+        #Try again
         self.reset_button = Button(text="Try again", font_size='35sp', on_press=reset_callback)
         self.reset_button.background_color = (100/255, 100/255, 255/255, 1)
         self.reset_button.opacity = 0
 
+        #Save Score
         self.save_button = Button(text="Save Score", font_size='35sp', on_press=save_callback)
         self.save_button.background_color = (100/255, 100/255, 255/255, 1)
         self.save_button.opacity = 0
 
+        #Back to Menu
         self.back_to_menu_button = Button(text="Back to Menu", font_size='35sp', on_press=back_to_menu_callback)
         self.back_to_menu_button.background_color = (100/255, 100/255, 255/255, 1)
 
+        #add to screen
         self.add_widget(self.reset_button)
         self.add_widget(self.save_button)
         self.add_widget(self.back_to_menu_button)
@@ -158,7 +168,7 @@ class ReactionTimeTestApp(App):
             
             self.sound.play()
         self.title = 'God Reaction Test'
-        self.icon = 'game/X.png'
+        self.icon = 'game/icon_x.png'
 
         self.menu_screen = MenuScreen(
             start_callback=self.start_game,
@@ -170,8 +180,6 @@ class ReactionTimeTestApp(App):
             volume_down_callback=self.volume_down
         )
 
-        
-        
         return self.menu_screen
     
     def start_game(self, instance):
@@ -240,7 +248,7 @@ class ReactionTimeTestApp(App):
         back_to_menu_button = Button(
             text="Back to Menu",
             font_size='20sp',
-            background_color=(0.8, 0.8, 0, 1),
+            background_color=(0.8, 0.8, 0.8, 1),
             on_press=lambda x: self.back_to_menu(x)
         )
         about_layout.add_widget(back_to_menu_button)
