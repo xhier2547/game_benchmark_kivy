@@ -6,6 +6,8 @@ from kivy.uix.label import Label
 from kivy.clock import Clock
 from random import uniform
 from kivy.core.audio import SoundLoader
+from kivy.uix.popup import Popup
+
 from kivy.base import stopTouchApp
 
     #menu
@@ -14,7 +16,7 @@ class MenuScreen(BoxLayout):
                  volume_up_callback, volume_down_callback, **kwargs):
         super(MenuScreen, self).__init__(**kwargs)
         self.orientation = "vertical"
-        self.spacing = 10
+        self.spacing = 0
         
         #Start Reaction Test
         self.start_button = Button(text="Start Reaction Test", on_press=start_callback, font_size='70sp')
@@ -40,6 +42,8 @@ class MenuScreen(BoxLayout):
         self.exits_button = Button(text="Exit", on_press=exit_callback, font_size='30sp')
         self.exits_button.background_color = (100/255, 100/255, 5/255, 1)
         self.add_widget(self.exits_button)
+        
+        
 
         #vol up down
         self.volume_up_callback = volume_up_callback
@@ -72,6 +76,7 @@ class ButtonsLayout(BoxLayout):
         self.add_widget(self.reset_button)
         self.add_widget(self.save_button)
         self.add_widget(self.back_to_menu_button)
+        
 
         
 
@@ -160,16 +165,17 @@ class ReactionTimeGame(BoxLayout):
 
 class ReactionTimeTestApp(App):
     def build(self):
-                
+        
+        self.title = 'God Reaction Test'
+        self.icon = 'game/icon_x.png'
+        
         self.sound = SoundLoader.load('GODS.mp3')
         if self.sound:
-            self.sound.volume = 0.05
+            self.sound.volume = 0.01
             self.sound.loop = True
             
             self.sound.play()
-        self.title = 'God Reaction Test'
-        self.icon = 'game/icon_x.png'
-
+            
         self.menu_screen = MenuScreen(
             start_callback=self.start_game,
             show_score_rank_callback=self.show_score_rank,
@@ -205,7 +211,20 @@ class ReactionTimeTestApp(App):
         )
         
     def exit_game(self, instance):
-        stopTouchApp()
+        content = BoxLayout(orientation='vertical', spacing=10)
+        content.add_widget(Label(text='You wanan leave me alone T_T ?'))
+    
+        # pop up exit
+        popup = Popup(title='Exit is crying ', content=content, size_hint=(None, None), size=(300, 200))
+        popup.background_color = (0, 0.3, 0.3, 1)
+        yes_button = Button(text='Yes, u did u good enough .', on_press=lambda x: self.stop())
+        yes_button.background_color = (0.8, 0.2, 0.2, 1)
+        no_button = Button(text='No, i want more better !', on_press=popup.dismiss)
+        no_button.background_color = (0.2, 0.8, 0.2, 1)
+
+        content.add_widget(yes_button)
+        content.add_widget(no_button)
+        popup.open()
 
     def save_score(self, instance):
         if hasattr(self, 'game_screen') and isinstance(self.game_screen, ReactionTimeGame):
@@ -319,7 +338,7 @@ class ReactionTimeTestApp(App):
         setting_layout.add_widget(setting_label)
 
 
-        self.setting_label = Label(text=f"Volume: {self.sound.volume:.2f}", font_size='35sp', halign='center',
+        self.setting_label = Label(text=f"Volume: {self.sound.volume:.1f}", font_size='35sp', halign='center',
                                 valign='middle')
         setting_layout.add_widget(self.setting_label)
         
