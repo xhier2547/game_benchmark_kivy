@@ -1,13 +1,10 @@
 # Hello, My name is Xhi3r .
 
 **Welcome to the God Benchmark Game**
-
 **the god benchmark game made with kivy in python**
 
 the game is reaction time test for check your brain and reaction are still good or bad, you can use it for the better reaction ! 
 
-
-# let test and train you reaction now
 
 ## Features
   - Have menu for play make you better reaction and can save the time.
@@ -35,3 +32,5 @@ the game is reaction time test for check your brain and reaction are still good 
   ``` bash
   python3 main.py
   ```
+
+# Thank you for watching , meow meow <3 .

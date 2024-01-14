@@ -23,7 +23,7 @@ class MenuScreen(BoxLayout):
         self.add_widget(self.start_button)
 
         #Score Rank
-        self.score_rank_button = Button(text="Score", on_press=show_score_rank_callback, font_size='30sp')
+        self.score_rank_button = Button(text="Score Test", on_press=show_score_rank_callback, font_size='30sp')
         self.score_rank_button.background_color = (100/255, 100/255, 255/255, 1)
         self.add_widget(self.score_rank_button)
         
@@ -88,7 +88,7 @@ class ReactionTimeGame(BoxLayout):
         self.back_to_menu_callback = back_to_menu_callback
         self.reaction_times = []
 
-        self.reaction_box = Button(text="Click me!", font_size='60sp', on_press=self.record_reaction_time, 
+        self.reaction_box = Button(text="Click me!", font_size='80sp', on_press=self.record_reaction_time, 
                             size_hint=(1, 2 ))
         self.reaction_box.background_color = (1/255, 230/255, 50/255, 1)
         self.reaction_box.opacity = 0
