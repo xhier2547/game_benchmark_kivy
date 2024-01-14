@@ -23,7 +23,7 @@ class MenuScreen(BoxLayout):
         self.add_widget(self.start_button)
 
         #Score Rank
-        self.score_rank_button = Button(text="Score Rank", on_press=show_score_rank_callback, font_size='30sp')
+        self.score_rank_button = Button(text="Score", on_press=show_score_rank_callback, font_size='30sp')
         self.score_rank_button.background_color = (100/255, 100/255, 255/255, 1)
         self.add_widget(self.score_rank_button)
         
@@ -54,7 +54,7 @@ class ButtonsLayout(BoxLayout): #กล่องเล็กใน หน้า 
     def __init__(self, reset_callback, save_callback, back_to_menu_callback, **kwargs):
         super(ButtonsLayout, self).__init__(**kwargs)
         self.orientation = "horizontal"
-        self.spacing = 6
+        self.spacing = 0
         self.size_hint=(1, 0.3)
         
         #Try again
@@ -125,6 +125,12 @@ class ReactionTimeGame(BoxLayout):
             end_time = Clock.get_time()
             reaction_time = (end_time - self.start_time) * 1000
             self.reaction_time_label.text = f"{reaction_time:.0f} ms \n "
+            if reaction_time >=  250:
+                print('You need more practice.')
+            elif 160 < reaction_time < 249 :
+                print("It's good time. ")
+            elif reaction_time < 160 :
+                print('You are real G.O.A.T .')
             self.reaction_time_label.font_size = '70sp'
             self.num_attempts += 1
             self.total_reaction_time += reaction_time
@@ -257,13 +263,12 @@ class ReactionTimeTestApp(App):
 
     def display_average_score(self, average_score):
         about_layout = BoxLayout(orientation="vertical", spacing=6)
-
         score_label = Label(
-            text=f"Average Reaction Time: {average_score:.2f} ms",
-            font_size='20sp',
+            text=f"Score Reaction Time: {average_score:.2f} ms",
+            font_size='50sp',
             halign='center',
             valign='middle',
-            size_hint = (1,5)
+            size_hint = (1,4)
         )
         about_layout.add_widget(score_label)
 
@@ -280,12 +285,12 @@ class ReactionTimeTestApp(App):
 
 
     def show_about(self, instance):
-        about_layout = BoxLayout(orientation="vertical", spacing=6)
+        about_layout = BoxLayout(orientation="vertical", spacing=0)
 
         about_label = Label(
-            text="Contact me.\n"
+            text="My Contact \n"
                 "Follow me on social media for CONTENT:",
-            font_size='20sp',
+            font_size='30sp',
             halign='center',
             valign='middle'
         )
@@ -293,7 +298,7 @@ class ReactionTimeTestApp(App):
 
         instagram_button = Button(
             text="Instagram",
-            font_size='20sp',
+            font_size='25sp',
             background_color=(0, 0, 1, 1),
             on_press=lambda x: self.open_link("https://www.instagram.com/tng.aj/")
         )
@@ -301,7 +306,7 @@ class ReactionTimeTestApp(App):
 
         twitter_button = Button(
             text="Twitter",
-            font_size='20sp',
+            font_size='25sp',
             background_color=(0, 0.5, 1, 1),
             on_press=lambda x: self.open_link("https://twitter.com/Xhi3r")
         )
@@ -309,7 +314,7 @@ class ReactionTimeTestApp(App):
 
         github_button = Button(
             text="GitHub",
-            font_size='20sp',
+            font_size='25sp',
             background_color=(0.5, 0, 0, 1),
             on_press=lambda x: self.open_link("https://github.com/xhier2547/game_benchmark_kivy")
         )
@@ -328,7 +333,7 @@ class ReactionTimeTestApp(App):
 
 
     def show_setting(self, instance):
-        setting_layout = BoxLayout(orientation="vertical", spacing=6)
+        setting_layout = BoxLayout(orientation="vertical", spacing=0)
 
         setting_label = Label(
             text="- Setting -\n"
