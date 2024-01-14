@@ -1,3 +1,4 @@
+# การเรียกใช้เครื่องมือและ Libaries
 from kivy.app import App
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
@@ -8,7 +9,7 @@ from kivy.core.audio import SoundLoader
 from kivy.uix.popup import Popup
 
 
-    #menu
+#Menu App
 class MenuScreen(BoxLayout):
     def __init__(self, start_callback, show_score_rank_callback, exit_callback, show_about_callback, setting_callback,
                  volume_up_callback, volume_down_callback, **kwargs):
@@ -48,8 +49,8 @@ class MenuScreen(BoxLayout):
         self.volume_down_callback = volume_down_callback
         
         
-    #game stated
-class ButtonsLayout(BoxLayout):
+
+class ButtonsLayout(BoxLayout): #กล่องเล็กใน หน้า reaction test
     def __init__(self, reset_callback, save_callback, back_to_menu_callback, **kwargs):
         super(ButtonsLayout, self).__init__(**kwargs)
         self.orientation = "horizontal"
@@ -75,7 +76,7 @@ class ButtonsLayout(BoxLayout):
         self.add_widget(self.save_button)
         self.add_widget(self.back_to_menu_button)
         
-
+# การทำงานขอว Object ที่อยู่ในหน้าเล่น reaction test
 class ReactionTimeGame(BoxLayout):
     def __init__(self, reset_callback, save_callback, back_to_menu_callback, **kwargs):
         super(ReactionTimeGame, self).__init__(**kwargs)
@@ -93,7 +94,7 @@ class ReactionTimeGame(BoxLayout):
         self.reaction_box.opacity = 0
 
         self.reaction_time_label = Label(text="")
-
+        #เรียกใช้กล่องเล็ก ที่ footer ในเกมเทส
         self.buttons_layout = ButtonsLayout(
             reset_callback=self.reset_test,
             save_callback=self.save_score,
@@ -163,7 +164,7 @@ class ReactionTimeGame(BoxLayout):
     def back_to_menu(self, instance):
         self.back_to_menu_callback()
 
-
+# setting ต่างของฟังก์ชั่น ใน App
 class ReactionTimeTestApp(App):
     def build(self):
         
@@ -219,7 +220,7 @@ class ReactionTimeTestApp(App):
         # pop up exit
         popup = Popup(title='Exit is crying ', content=content, size_hint=(None, None), size=(300, 200))
         popup.background_color = (0, 0.3, 0.3, 1)
-        yes_button = Button(text='Yes, u did u good enough .', on_press=lambda x: self.stop())
+        yes_button = Button(text='Yes, i did well .', on_press=lambda x: self.stop())
         yes_button.background_color = (0.8, 0.2, 0.2, 1)
         no_button = Button(text='No, i want more better !', on_press=popup.dismiss)
         no_button.background_color = (0.2, 0.8, 0.2, 1)
@@ -370,16 +371,15 @@ class ReactionTimeTestApp(App):
         self.menu_screen.clear_widgets()
         self.menu_screen.add_widget(setting_layout)
         
+    def update_volume_label(self):
+        if hasattr(self, 'setting_label') and isinstance(self.setting_label, Label) and hasattr(self, 'sound') and self.sound:
+            self.setting_label.text = f"Volume: {self.sound.volume:.2f}"
+
     def volume_up(self, instance):
         if hasattr(self, 'sound') and self.sound:
             self.sound.volume = min(1, self.sound.volume + 0.1)
             self.update_volume_label()
 
-    def volume_down(self, instance):
-        if hasattr(self, 'sound') and self.sound:
-            self.sound.volume = max(0, self.sound.volume - 0.1) 
-            self.update_volume_label()
-    
     def volume_down(self, instance):
         if hasattr(self, 'sound') and self.sound:
             self.sound.volume = max(0, self.sound.volume - 0.1)
@@ -389,5 +389,6 @@ class ReactionTimeTestApp(App):
         import webbrowser
         webbrowser.open(url)
 
+# รัน App
 if __name__ == '__main__':
     ReactionTimeTestApp().run()
