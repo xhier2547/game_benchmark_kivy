@@ -1,4 +1,4 @@
-Hello, My name is Xhi3r .
+# Hello, My name is Xhi3r .
 
 **Welcome to the benchmark game**
 
@@ -8,9 +8,26 @@ Run this project with
 
 first step install pacakage .
 
-```
-pip install kivy
-```
 
-and you can run in this app file !!!
 
+## Installation
+
+  ### install kivy
+
+  ``` bash
+  pip install kivy
+  ```
+
+  ### Run App
+
+   - **Windows:**
+
+  ``` bash
+  python main.py
+  ```
+
+  - **macOS/Linux:**
+
+  ``` bash
+  python3 main.py
+  ```
